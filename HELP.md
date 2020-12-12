@@ -36,25 +36,7 @@ Table 1 : weather_history responsible for storing Weather history
 
 ### Assumptions
 
-While designing APIs I tried to fulfill the scenarios given in Assignment PDF but still I kept some assumptions as briefed below.
 
-```
-Period considered as duration between From-To-End date i.e. User will pass Start date to End date for fulfilling data criteria for few APIs
-From-TO-End dates are allowed in form of YYYY-MM-DD format only wherever applicable
-Net pay for Hourly empolyees are calculated as hourly_wage*working_hours
-```
-#There should be one API to retrieve a json object with information about the money that should be paid out to an employee in a certain period.
-
-```
-For Above mentioned API I considered to provide DATA for all the employees for certain period
-
-```
-#The system should allow getting payrolls for an employee for a certain period
-
-```
-For Above mentioned API I considered to provide DATA for only an employee for certain period
-
-```
 
 ### Prerequisites
 
@@ -70,10 +52,10 @@ Eclipse [for code walkthrough]
 
 ```
 
-Either you may allow to create schema by Application itself or Import Payroll System schema [available in ../resources/payroll_system.sql] in mysql using below command :
+Either you may allow to create schema by Application itself or Import Weather Information System schema [available in ../resources/weather.sql] in mysql using below command :
 
 ```
-mysql > source ../resources/payroll_system.sql;
+mysql > source ../resources/weather.sql;
 
 ```
 
@@ -81,7 +63,7 @@ mysql > source ../resources/payroll_system.sql;
 
 Please see through below steps for system to be up and running
 
-For Preparing WAR file
+For Preparing JAR file
 
 ```
 [code directory]>mvn clean install
@@ -96,11 +78,11 @@ As I am using Spring-boot it does have embedded Tomcat which we may run using be
 Please access at given URL for more operations : 
 
 ```
-http://localhost:8080/api/staffMembers/{endpoint}
+http://localhost:8080/{endpoint}
 
 ```
 
-By Default it would be accessible on 8080 port which may be changed in application.properties by following value change :
+By Default it would be accessible on 9092 port which may be changed in application.properties by following value change :
 
 ```
 [code directory]>src>main>resources>application.properties
@@ -138,21 +120,11 @@ file://[code directory]/target/site/jacoco/index.html
 
 ```
 
-### API Docs
-
-API docs are also embedded & available in form of SWAGGER OPEN API docs which may be accessible at below URL once Server is up and running :
-
-```
-http://localhost:{port-no}/swagger-ui/index.html
-
-```
-
 ## Built With
 
 * [Spring-boot](https://start.spring.io/) - The web framework used
 * [Maven](https://maven.apache.org/) - Dependency Management
 * [MySQL](https://www.mysql.com/) - Database used
-* [iText] (https://itextpdf.com/en) - PDF Generation
 
 ## Author
 
