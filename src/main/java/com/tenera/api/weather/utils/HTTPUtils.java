@@ -3,7 +3,6 @@ package com.tenera.api.weather.utils;
 import java.io.IOException;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpStatus;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -40,7 +39,7 @@ public class HTTPUtils {
 			final HttpGet httpget = new HttpGet(WeatherApiConstants.BASE_URL+location);
 
 			logger.info("@method sendHttpRequestForWeatherInformation Executing request " + httpget.getMethod() + " " + httpget.getURI());
-			
+
 			final CloseableHttpResponse responseBody = httpclient.execute(httpget);
 
 			return convertResponseToString(responseBody);
@@ -60,18 +59,13 @@ public class HTTPUtils {
 	{
 
 		final int status = response.getStatusLine().getStatusCode(); 
-		
+
 		logger.info("@method convertResponseToString @param status " + status);
 
 		final HttpEntity entity = response.getEntity();
-		
-		if (status == HttpStatus.SC_OK) 
-		{ 
-			return entity != null ? EntityUtils.toString(entity) : null; 
-		}else 
-		{
-			return entity != null ? EntityUtils.toString(entity) : null; 
-		}
+
+		return entity != null ? EntityUtils.toString(entity) : null; 
+
 	}
 }
 
