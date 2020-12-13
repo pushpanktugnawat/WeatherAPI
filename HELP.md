@@ -39,6 +39,8 @@ Table 1 : weather_history responsible for storing Weather history
 
 As per exposed API from OpenWeatherMap it contains the data for 200,000 cities which gave the result as expected.
 
+OpenWeatherMap supports different units & as per usecase we are using units as "metric" as we required the data in degree celsius.
+
 Our endpoints interact with it and pass through the data which we received it from OpenWeatherMap.Many times we receive "city not found" if any irregular location values is being passed.
 
 ### Prerequisites
