@@ -69,6 +69,12 @@ public class WeatherHistoryRestImplTest {
 		this.responseEntity= new ResponseEntity<WeatherHistoryWrapper>(historyWrapper,HttpStatus.OK);
 	}
 	
+	/**
+	 * Gets the history weather information success.
+	 *
+	 * @return the history weather information success
+	 * @throws Exception the exception
+	 */
 	@Test
 	 @Tag("getHistoryWeatherInformation")
 	 void getHistoryWeatherInformation_Success() throws Exception {
