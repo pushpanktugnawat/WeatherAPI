@@ -126,6 +126,13 @@ file://[code directory]/target/site/jacoco/index.html
 ```
 As per currrent Code Coverage value we have covered almost 75% of codebase.
 
+## Improvements
+
+* If Application becomes vast and more regular to be used we may extend it for further implementation with NOSQL databases
+* Security could be integrated
+* Properties file could be defined to keep the API_KEY as regular updated value
+* Test coverage could be increased
+
 ## Built With
 
 * [Spring-boot](https://start.spring.io/) - The web framework used
