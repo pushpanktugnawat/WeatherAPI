@@ -23,16 +23,16 @@ import com.tenera.api.weather.utils.WeatherApiConstants;
 @Controller
 public class WeatherInfoServiceImpl implements IWeatherInfoService{
 
-	
+
 	/** The logger. */
 	private Logger logger=LoggerFactory.getLogger(WeatherInfoServiceImpl.class);
-	
+
 	/** The weather history service. */
 	@Autowired
 	private IWeatherHistoryService weatherHistoryService;
-	
 
-	
+
+
 	/**
 	 * Gets the current weather information.
 	 *
@@ -43,50 +43,30 @@ public class WeatherInfoServiceImpl implements IWeatherInfoService{
 	public ResponseEntity<String> getCurrentWeatherInformation(String location) 
 	{
 		logger.info("@method getCurrentWeatherInformation @param location "+location);
-		
 		try 
 		{
 			HTTPUtils httpUtils= new HTTPUtils();
 			String responseBody=httpUtils.sendHttpRequestForWeatherInformation(location);
-			
+
 			if(responseBody!=null && !responseBody.isEmpty())
 			{
 				JSONObject jsonObject=new JSONObject(responseBody);
-				/**
-				 * Weather Info is return irregular value of status Code
-				 * */
 				int responseCode=jsonObject.getInt(WeatherApiConstants.RESPONSE_CODE);
-				
+
 				if(responseCode==HttpStatus.OK.value())
 				{
-					JSONObject responseObject=new JSONObject();
-					
-					JSONObject mainJsonObjectForTempNPressure=jsonObject.getJSONObject(WeatherApiConstants.MAIN_KEY);
-					
-					double temp=0.0,pressure=0.0;
-					if(mainJsonObjectForTempNPressure!=null)
-					{
-						temp=  mainJsonObjectForTempNPressure.getDouble(WeatherApiConstants.TEMP);
-						pressure= mainJsonObjectForTempNPressure.getDouble(WeatherApiConstants.PRESSURE);
-						
-						responseObject.put(WeatherApiConstants.TEMP,temp);
-						responseObject.put(WeatherApiConstants.PRESSURE, pressure);
-					}
-					
+					JSONObject responseJsonObject=createResponseObject(jsonObject);
+
 					JSONObject sysJsonObjectForCountryCode=jsonObject.getJSONObject(WeatherApiConstants.SYS);
-					
+
 					if(sysJsonObjectForCountryCode!=null)
 					{
 						String countryCode=sysJsonObjectForCountryCode.getString(WeatherApiConstants.COUNTRY);
 						location=location.concat(","+countryCode);
 					}
-					
-					boolean umbrellaRequiredOrNot=getUmbrellaRequiredOrNot(jsonObject);
-					responseObject.put(WeatherApiConstants.UMBRELLA, umbrellaRequiredOrNot);
-					
-					weatherHistoryService.createWeatherHistory(temp,pressure,umbrellaRequiredOrNot,location);
-					
-					return new ResponseEntity<String>(responseObject.toString(),HttpStatus.OK);
+					weatherHistoryService.createWeatherHistory(responseJsonObject.getDouble(WeatherApiConstants.TEMP),
+							responseJsonObject.getDouble(WeatherApiConstants.PRESSURE),responseJsonObject.getBoolean(WeatherApiConstants.UMBRELLA),location);
+					return new ResponseEntity<String>(responseJsonObject.toString(),HttpStatus.OK);
 				}else 
 				{
 					return new ResponseEntity<String>(jsonObject.toString(), HttpStatus.OK);
@@ -95,7 +75,7 @@ public class WeatherInfoServiceImpl implements IWeatherInfoService{
 		} catch (ClientProtocolException e) 
 		{
 			logger.error("error occurred @exception ClientProtocolException @method getCurrentWeatherInformation ");
-			
+
 		} catch (IOException e) 
 		{
 			logger.error("error occurred @exception IOException @method getCurrentWeatherInformation");
@@ -106,7 +86,39 @@ public class WeatherInfoServiceImpl implements IWeatherInfoService{
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}
 
-	
+
+	/**
+	 * Creates the response object.
+	 *
+	 * @param jsonObject the json object
+	 * @return the JSON object
+	 * @throws JSONException the JSON exception
+	 */
+	private JSONObject createResponseObject(JSONObject jsonObject) throws JSONException 
+	{
+		logger.info("@method getCurrentWeatherInformation");
+
+		JSONObject mainJsonObjectForTempNPressure=jsonObject.getJSONObject(WeatherApiConstants.MAIN_KEY);
+
+		JSONObject responseJsonObject=new JSONObject();
+
+		double temp=0.0,pressure=0.0;
+		if(mainJsonObjectForTempNPressure!=null)
+		{
+			temp=  mainJsonObjectForTempNPressure.getDouble(WeatherApiConstants.TEMP);
+			pressure= mainJsonObjectForTempNPressure.getDouble(WeatherApiConstants.PRESSURE);
+
+			responseJsonObject.put(WeatherApiConstants.TEMP,temp);
+			responseJsonObject.put(WeatherApiConstants.PRESSURE, pressure);
+		}
+
+		boolean umbrellaRequiredOrNot=getUmbrellaRequiredOrNot(jsonObject);
+		responseJsonObject.put(WeatherApiConstants.UMBRELLA, umbrellaRequiredOrNot);
+		return responseJsonObject;
+
+	}
+
+
 	/**
 	 * Gets the umbrella required or not.
 	 *
@@ -117,7 +129,7 @@ public class WeatherInfoServiceImpl implements IWeatherInfoService{
 	private boolean getUmbrellaRequiredOrNot(JSONObject jsonObject) throws JSONException 
 	{
 		logger.info("@method getUmbrellaRequiredOrNot");
-		
+
 		String weatherCondition="";
 		if(jsonObject.getJSONArray(WeatherApiConstants.WEATHER)!=null && 
 				jsonObject.getJSONArray(WeatherApiConstants.WEATHER).length()>0) 
@@ -125,7 +137,7 @@ public class WeatherInfoServiceImpl implements IWeatherInfoService{
 			weatherCondition=(String) jsonObject.getJSONArray(WeatherApiConstants.WEATHER).
 					getJSONObject(0).get(WeatherApiConstants.MAIN_KEY);
 		}
-		
+
 		if(weatherCondition.equals(WeatherApiConstants.DRIZZLE) || weatherCondition.equals(WeatherApiConstants.RAIN) 
 				|| weatherCondition.equals(WeatherApiConstants.THUNDERSTORM))
 		{
