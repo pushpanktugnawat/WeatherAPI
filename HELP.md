@@ -12,6 +12,7 @@ I have follwed SOLID principle before designing it so that each layer does have 
 REST LAYER [End point for external systems] <---> SERVICE LAYER [RESPONSIBLE FOR BUSINESS LOGIC , AND PASS THROUGH DATA TO DAO LAYER] <--> DAO LAYER [RESPONSIBLE FOR DATA BASE OPERATIONS]
 
 ```
+MYSQL has been used as database for storing historical data as its easy to install and easy to use. Relational DB is used because as per usecase we need to pass through and access the data based on City which allows it to use more flexible.
 
 ## Database Design
 
@@ -36,7 +37,9 @@ Table 1 : weather_history responsible for storing Weather history
 
 ### Assumptions
 
+As per exposed API from OpenWeatherMap it contains the data for 200,000 cities which gave the result as expected.
 
+Our endpoints interact with it and pass through the data which we received it from OpenWeatherMap.Many times we receive "city not found" if any irregular location values is being passed.
 
 ### Prerequisites
 
@@ -119,18 +122,13 @@ Open following file in browser to see the code Coverage percentage :
 file://[code directory]/target/site/jacoco/index.html
 
 ```
+As per currrent Code Coverage value we have covered almost 75% of codebase.
 
 ## Built With
 
 * [Spring-boot](https://start.spring.io/) - The web framework used
 * [Maven](https://maven.apache.org/) - Dependency Management
 * [MySQL](https://www.mysql.com/) - Database used
-
-## Author
-
-* **Pushpank Tugnawat**  - [Github](https://github.com/pushpanktugnawat)
-
-
 
 
 ### Reference Documentation
@@ -150,4 +148,9 @@ The following guides illustrate how to use some features concretely:
 * [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
 * [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
 * [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
+
+## Author
+
+* **Pushpank Tugnawat**  - [Github](https://github.com/pushpanktugnawat)
+
 
