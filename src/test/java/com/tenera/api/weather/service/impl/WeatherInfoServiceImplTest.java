@@ -58,6 +58,12 @@ public class WeatherInfoServiceImplTest {
 		
 	}
 	
+	/**
+	 * Gets the current weather information sucess.
+	 *
+	 * @return the current weather information sucess
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void getCurrentWeatherInformation_Sucess() throws Exception {
 

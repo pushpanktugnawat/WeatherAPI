@@ -61,6 +61,11 @@ public class WeatherHistoryServiceImplTest {
 		
 	}
 	
+	/**
+	 * Find weather history by city name sucess.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void findWeatherHistoryByCityName_Sucess() throws Exception {
 
@@ -71,6 +76,11 @@ public class WeatherHistoryServiceImplTest {
 		Assertions.assertEquals(expected, this.responseEntity);
 	}
 	
+	/**
+	 * Find weather history by city name no data.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void findWeatherHistoryByCityName_NoData() throws Exception {
 
